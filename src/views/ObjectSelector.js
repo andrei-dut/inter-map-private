@@ -10,6 +10,12 @@ import { ReactComponent as NotWorkSvg } from "../icons/notWork.svg";
 import { ReactComponent as SettingsSvg } from "../icons/settings.svg";
 import { ReactComponent as ShopHouseSvg } from "../icons/shopHouse.svg";
 import { ReactComponent as PredstavSvg } from "../icons/predstav.svg";
+// new multi brands icons
+import { ReactComponent as NewCrownBSvg } from "../icons/newCrownB.svg";
+import { ReactComponent as NewCrownGSvg } from "../icons/newCrownG.svg";
+import { ReactComponent as NewCrownYSvg } from "../icons/newCrownY.svg";
+import { ReactComponent as NewCrownLBSvg } from "../icons/newCrownLB.svg";
+// end
 import styled from "styled-components";
 
 const CountrySelectorContainer = styled.div`
@@ -31,7 +37,7 @@ const CountrySelectorContainer = styled.div`
   @media (max-width: 568px) {
     width: 220px;
     top: 2px;
-  left: 2px;
+    left: 2px;
   }
   .scroll-container {
     overflow: auto;
@@ -122,8 +128,7 @@ const CountryItem = styled.li.withConfig({
       padding-right: 4px;
     }
     svg {
-      transform: ${({ openSubList }) =>
-        openSubList ? "rotate(180deg)" : "rotate(0deg)"};
+      transform: ${({ openSubList }) => (openSubList ? "rotate(180deg)" : "rotate(0deg)")};
     }
   }
 `;
@@ -137,7 +142,7 @@ const ElemsList = styled.ul`
 
 const ElemItem = styled.li`
   display: flex;
-  height: 55px;
+  min-height: 55px;
   padding: 10px 14px;
   align-items: center;
   gap: 11px;
@@ -158,8 +163,8 @@ const ElemItem = styled.li`
       font-weight: 700;
       line-height: 120%; /* 13.2px */
       @media (max-width: 568px) {
-    font-size: 9px;
-  }
+        font-size: 9px;
+      }
     }
     .desc__address {
       color: #000;
@@ -168,9 +173,10 @@ const ElemItem = styled.li`
       font-style: normal;
       font-weight: 400;
       line-height: 120%; /* 12px */
+      padding-top: 4px;
       @media (max-width: 568px) {
-    font-size: 8px;
-  }
+        font-size: 8px;
+      }
     }
   }
 `;
@@ -198,9 +204,7 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
   const handleCountryClick = (country) => {
     // console.log(country);
     setSelectedCountry((prevSelectedCountry) => {
-      const isCountryInPrev = prevSelectedCountry.some(
-        (_) => _.name === country.name
-      );
+      const isCountryInPrev = prevSelectedCountry.some((_) => _.name === country.name);
 
       return isCountryInPrev
         ? prevSelectedCountry.filter((_) => _.name !== country.name)
@@ -233,6 +237,14 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
       //   return <BuildingSvg />;
       case "6":
         return <NotWorkSvg />;
+      case "7a":
+        return <NewCrownGSvg />;
+      case "7b":
+        return <NewCrownBSvg />;
+      case "7c":
+        return <NewCrownYSvg />;
+      case "7d":
+        return <NewCrownLBSvg />;
 
       default:
         return null;
@@ -253,9 +265,7 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
     (country) =>
       (country.name.toLowerCase().includes(inputValue.toLowerCase()) &&
         filterElems.find((_c) => _c.name === country.name)?.elems?.length) ||
-      country.elems.some((el) =>
-        el.name.toLowerCase().includes(inputValue.toLowerCase())
-      )
+      country.elems.some((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()))
   );
 
   // console.log(filterElems, filterCountries);
@@ -294,9 +304,7 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
                   const findedSelectedCountry = selectedCountry.find(
                     (_) => _.name === country.name
                   );
-                  const findedChangeLength = filterElems.find(
-                    (_) => _.name === country.name
-                  );
+                  const findedChangeLength = filterElems.find((_) => _.name === country.name);
                   return (
                     <CountryItem
                       key={country.name}
@@ -316,9 +324,7 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
                         <ElemsList>
                           {findedSelectedCountry.elems
                             .filter((elem) =>
-                              elem.name
-                                .toLowerCase()
-                                .includes(inputValue.toLowerCase())
+                              elem.name.toLowerCase().includes(inputValue.toLowerCase())
                             )
                             .map((elem, index) => (
                               <ElemItem
@@ -331,9 +337,9 @@ const ObjectSelector = ({ countries, handleMarkerClick }) => {
                                 {getIconByStatus(elem.status)}
                                 <div className="elem__desc">
                                   <p className="desc__name">{elem.name}</p>
-                                  <p className="desc__address">
-                                    {elem.address}
-                                  </p>
+                                  {elem.address ? (
+                                    <p className="desc__address">{elem.address}</p>
+                                  ) : null}
                                 </div>
                               </ElemItem>
                             ))}

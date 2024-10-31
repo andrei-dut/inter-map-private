@@ -1,4 +1,4 @@
-import { locationsArray } from "./data/locations";
+// import { locationsArray } from "./data/locations";
 import React, { useMemo, useState } from "react";
 import "./App.css";
 import MapLegend from "./views/MapLegend";
@@ -6,6 +6,7 @@ import ObjectSelector from "./views/ObjectSelector";
 import MapContainer from "./views/Ymaps";
 import PreviewSlide from "./views/PreviewSlide";
 import jsonData from "./data/stars.json";
+import { newMultiBrands } from "./data/newMultiBrands";
 
 const pjson = require("../package.json");
 
@@ -13,7 +14,7 @@ function App() {
   // const [stars, setStars] = useState([]);
 
   const countries = useMemo(() => {
-    return locationsArray.reduce((prev, current) => {
+    return newMultiBrands.reduce((prev, current) => {
       const isCountry = prev.find((_) => _.name === current.country);
 
       if (isCountry) {
@@ -44,8 +45,8 @@ function App() {
       </div>
 
       <MapContainer
-        markers={locationsArray}
-        markers2={Object.values(jsonData)}
+        markers={newMultiBrands}
+        // markers2={Object.values(jsonData)}
         stateMap={stateMap}
         setSlideId={setSlideId}
       />

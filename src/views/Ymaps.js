@@ -5,6 +5,13 @@ import { YMaps, Map, Placemark, Clusterer } from "react-yandex-maps";
 import CrownBSvg from "../icons/crownB.svg";
 import CrownRSvg from "../icons/crownR.svg";
 import CrownYSvg from "../icons/crownY.svg";
+// new multi brands icons
+import NewCrownBSvg from "../icons/newCrownB.svg";
+import NewCrownGSvg from "../icons/newCrownG.svg";
+import NewCrownYSvg from "../icons/newCrownY.svg";
+import NewCrownLBSvg from "../icons/newCrownLB.svg";
+// end
+
 import NotWorkSvg from "../icons/notWork.svg";
 import SettingsSvg from "../icons/settings.svg";
 import ShopHouseSvg from "../icons/shopHouse.svg";
@@ -69,13 +76,13 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
       case "6":
         return NotWorkSvg;
       case "7a":
-        return CrownBSvg;
+        return NewCrownGSvg;
       case "7b":
-        return CrownBSvg;
+        return NewCrownBSvg;
       case "7c":
-        return CrownBSvg;
+        return NewCrownYSvg;
       case "7d":
-        return CrownBSvg;
+        return NewCrownLBSvg;
 
       default:
         return StarSvg;
@@ -144,32 +151,34 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
           }}
           propertie={{ hintContent: "Мало меток" }}
         >
-          {markers2.map((marker) => (
-            <Placemark
-              key={marker.id}
-              geometry={marker.coordinates}
-              properties={{
-                id: marker.id,
-                hintContent: marker.holding || marker.name,
-                iconContent: iconContent(
-                  marker.name,
-                  marker.holding ? 10 : 14,
-                  marker.holding ? "#1470bd" : "#1e98ff"
-                ),
-                _coordinates: marker.coordinates,
-              }}
-              options={{
-                iconLayout: "default#imageWithContent",
-                //   iconLayout: "default#image",
-                iconImageHref: getIconByStatus(marker.status),
-                iconImageSize: marker.holding ? [14, 14] : [28, 28],
-                iconImageOffset: [-7, -7],
-                iconContentOffset: [-53, -28],
-                // iconContentLayout: layout.content,
-              }}
-              onClick={handlePlacemarkClick}
-            />
-          ))}
+          {markers2
+            ? markers2.map((marker) => (
+                <Placemark
+                  key={marker.id}
+                  geometry={marker.coordinates}
+                  properties={{
+                    id: marker.id,
+                    hintContent: marker.holding || marker.name,
+                    iconContent: iconContent(
+                      marker.name,
+                      marker.holding ? 10 : 14,
+                      marker.holding ? "#1470bd" : "#1e98ff"
+                    ),
+                    _coordinates: marker.coordinates,
+                  }}
+                  options={{
+                    iconLayout: "default#imageWithContent",
+                    //   iconLayout: "default#image",
+                    iconImageHref: getIconByStatus(marker.status),
+                    iconImageSize: marker.holding ? [14, 14] : [28, 28],
+                    iconImageOffset: [-7, -7],
+                    iconContentOffset: [-53, -28],
+                    // iconContentLayout: layout.content,
+                  }}
+                  onClick={handlePlacemarkClick}
+                />
+              ))
+            : null}
         </Clusterer>
       </Map>
     </YMaps>

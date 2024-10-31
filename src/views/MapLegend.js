@@ -10,6 +10,13 @@ import { ReactComponent as ShopHouseSvg } from "../icons/shopHouse.svg";
 import { ReactComponent as PredstavSvg } from "../icons/predstav.svg";
 import { ReactComponent as StarSvg } from "../icons/star.svg";
 
+// new multi brands icons
+import { ReactComponent as NewCrownBSvg } from "../icons/newCrownB.svg";
+import { ReactComponent as NewCrownGSvg } from "../icons/newCrownG.svg";
+import { ReactComponent as NewCrownYSvg } from "../icons/newCrownY.svg";
+import { ReactComponent as NewCrownLBSvg } from "../icons/newCrownLB.svg";
+// end
+
 const WrapMapLegend = styled.div`
   width: 260px;
   position: fixed;
@@ -126,16 +133,20 @@ const MapLegend = () => {
       <SectionTitle>Мультибренды (МБ) :</SectionTitle>
       <IconsContainer>
         <IconWrapper>
-          <CrownYSvg />
-          <p>В проекте создания</p>
+          <NewCrownGSvg />
+          <p>Действующий</p>
         </IconWrapper>
         <IconWrapper>
-          <CrownRSvg />
-          <p>С долей участия белорусских предприятий</p>
+          <NewCrownBSvg />
+          <p>Строящийся</p>
         </IconWrapper>
         <IconWrapper>
-          <CrownBSvg />
-          <p>Без доли участия белорусских предприятий</p>
+          <NewCrownYSvg />
+          <p>Выделение земли</p>
+        </IconWrapper>
+        <IconWrapper>
+          <NewCrownLBSvg />
+          <p>Планируемые</p>
         </IconWrapper>
       </IconsContainer>
 
