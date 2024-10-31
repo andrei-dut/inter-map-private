@@ -46,7 +46,7 @@ function App() {
 
       <MapContainer
         markers={newMultiBrands}
-        // markers2={Object.values(jsonData)}
+        markers2={Object.values(jsonData)}
         stateMap={stateMap}
         setSlideId={setSlideId}
       />

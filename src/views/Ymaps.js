@@ -125,7 +125,8 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
                 iconContent: iconContent(
                   marker.name,
                   marker.holding ? 10 : 14,
-                  marker.holding ? "#1470bd" : "#1e98ff"
+                  "#124168"
+                  // marker.holding ? "#1470bd" : "#1e98ff"
                 ),
                 _coordinates: marker.coordinates,
               }}
@@ -161,7 +162,7 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
                     hintContent: marker.holding || marker.name,
                     iconContent: iconContent(
                       marker.name,
-                      marker.holding ? 10 : 14,
+                      marker.holding ? 6 : 8,
                       marker.holding ? "#1470bd" : "#1e98ff"
                     ),
                     _coordinates: marker.coordinates,
@@ -170,7 +171,7 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
                     iconLayout: "default#imageWithContent",
                     //   iconLayout: "default#image",
                     iconImageHref: getIconByStatus(marker.status),
-                    iconImageSize: marker.holding ? [14, 14] : [28, 28],
+                    iconImageSize: marker.holding ? [7, 7] : [14, 14],
                     iconImageOffset: [-7, -7],
                     iconContentOffset: [-53, -28],
                     // iconContentLayout: layout.content,
