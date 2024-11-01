@@ -31,7 +31,7 @@ function App() {
   const [stateMap, setStateMap] = useState({ center: [0, 0], zoom: 3 });
 
   const handleMarkerClickFromList = (marker) => {
-    setStateMap({ center: marker.coordinates, zoom: 10 });
+    setStateMap({ center: marker.coordinates, zoom: 15 });
     setTimeout(() => {
       setSelectedMarker(marker);
     }, 500);

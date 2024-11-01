@@ -48,7 +48,7 @@ const MapContainer = ({ markers, markers2, stateMap, setSelectedMarker }) => {
 
     setTimeout(() => {
       if (mapRef.current?.setCenter) {
-        mapRef.current.setCenter(_coordinates, 10, {
+        mapRef.current.setCenter(_coordinates, 15, {
           duration: 500,
         });
         setSelectedMarker(currentMarker);
