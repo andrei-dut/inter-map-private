@@ -28,7 +28,7 @@ function App() {
 
   const [selectedMarker, setSelectedMarker] = useState(null);
 
-  const [stateMap, setStateMap] = useState({ center: [0, 0], zoom: 3 });
+  const [stateMap, setStateMap] = useState({ center: [56.837864, 60.594882], zoom: 4 });
 
   const handleMarkerClickFromList = (marker) => {
     setStateMap({ center: marker.coordinates, zoom: 15 });
