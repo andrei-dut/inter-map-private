@@ -18,7 +18,7 @@ import ShopHouseSvg from "../icons/shopHouse.svg";
 import PredstavSvg from "../icons/predstav.svg";
 import StarSvg from "../icons/star.svg";
 
-const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
+const MapContainer = ({ markers, markers2, stateMap, setSelectedMarker }) => {
   let mapRef = useRef();
   const [layout, setLayout] = useState();
 
@@ -39,16 +39,19 @@ const MapContainer = ({ markers, markers2, stateMap, setSlideId }) => {
   };
 
   const handlePlacemarkClick = (e) => {
+    const allMarkers = [markers, markers2].flat();
     const placemarkId = e.get("target")?.properties?.get("id");
     const _coordinates = e.get("target")?.properties?.get("_coordinates");
-    console.log(`Клик по метке с идентификатором ${placemarkId}`, _coordinates);
+    const currentMarker = allMarkers.find((el) => el && el.id === placemarkId);
+    console.log(`Клик по метке с идентификатором ${placemarkId}`);
+    console.log(_coordinates);
 
     setTimeout(() => {
       if (mapRef.current?.setCenter) {
         mapRef.current.setCenter(_coordinates, 10, {
           duration: 500,
         });
-        // setSlideId(placemarkId);
+        setSelectedMarker(currentMarker);
       }
     }, 0);
   };

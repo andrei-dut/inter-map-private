@@ -4,7 +4,7 @@ import "./App.css";
 import MapLegend from "./views/MapLegend";
 import ObjectSelector from "./views/ObjectSelector";
 import MapContainer from "./views/Ymaps";
-import PreviewSlide from "./views/PreviewSlide";
+import PreviewInfo from "./views/PreviewInfo";
 import jsonData from "./data/stars.json";
 import { newMultiBrands } from "./data/newMultiBrands";
 
@@ -26,12 +26,15 @@ function App() {
     }, []);
   }, []);
 
-  const [slideId, setSlideId] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const [stateMap, setStateMap] = useState({ center: [0, 0], zoom: 3 });
 
-  const handleMarkerClickFromList = (coords) => {
-    setStateMap({ center: coords, zoom: 10 });
+  const handleMarkerClickFromList = (marker) => {
+    setStateMap({ center: marker.coordinates, zoom: 10 });
+    setTimeout(() => {
+      setSelectedMarker(marker);
+    }, 500);
   };
 
   return (
@@ -48,10 +51,10 @@ function App() {
         markers={newMultiBrands}
         markers2={Object.values(jsonData)}
         stateMap={stateMap}
-        setSlideId={setSlideId}
+        setSelectedMarker={setSelectedMarker}
       />
       <MapLegend />
-      <PreviewSlide slideId={slideId} setSlideId={setSlideId} />
+      <PreviewInfo selectedMarker={selectedMarker} setSelectedMarker={setSelectedMarker} />
       <p
         style={{
           position: "fixed",

@@ -18,6 +18,186 @@ import { ReactComponent as NewCrownLBSvg } from "../icons/newCrownLB.svg";
 // end
 import styled from "styled-components";
 
+const ObjectSelector = ({ countries, handleMarkerClick }) => {
+  const [isExpanded, setExpanded] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState([]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+  };
+
+  const handleCountryClick = (country) => {
+    // console.log(country);
+    setSelectedCountry((prevSelectedCountry) => {
+      const isCountryInPrev = prevSelectedCountry.some((_) => _.name === country.name);
+
+      return isCountryInPrev
+        ? prevSelectedCountry.filter((_) => _.name !== country.name)
+        : [...prevSelectedCountry, country];
+    });
+    // setExpanded(true); // Не закрываем список при клике на страну
+  };
+
+  const handleCityClick = (elem) => {
+    // Обработка выбора города
+    handleMarkerClick(elem);
+    console.log(`Выбран: ${elem?.name}`);
+  };
+
+  const getIconByStatus = (status) => {
+    switch (`${status}`) {
+      case "1":
+        return <ShopHouseSvg />;
+      case "2":
+        return <SettingsSvg />;
+      case "3":
+        return <PredstavSvg />;
+      case "4a":
+        return <CrownYSvg />;
+      case "4b":
+        return <CrownRSvg />;
+      case "4c":
+        return <CrownBSvg />;
+      // case "5":
+      //   return <BuildingSvg />;
+      case "6":
+        return <NotWorkSvg />;
+      case "7a":
+        return <NewCrownGSvg />;
+      case "7b":
+        return <NewCrownBSvg />;
+      case "7c":
+        return <NewCrownYSvg />;
+      case "7d":
+        return <NewCrownLBSvg />;
+
+      default:
+        return null;
+    }
+  };
+
+  const filterElems =
+    countries.map((el) => {
+      const newEl = { ...el, elems: el.elems.map((_el) => ({ ..._el })) };
+      newEl.elems = newEl.elems.filter((_) =>
+        _.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+
+      return newEl;
+    }) || [];
+
+  const filterCountries = countries?.filter(
+    (country) =>
+      (country.name.toLowerCase().includes(inputValue.toLowerCase()) &&
+        filterElems.find((_c) => _c.name === country.name)?.elems?.length) ||
+      country.elems.some((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()))
+  );
+
+  // console.log(filterElems, filterCountries);
+
+  return (
+    <>
+      {isExpanded ? (
+        <Overlay
+          onClick={() => {
+            setExpanded(false);
+            setInputValue("");
+          }}
+        />
+      ) : null}
+      <CountrySelectorContainer>
+        <InputContainer>
+          <MapMarkerIcon />
+          <Input
+            type="text"
+            placeholder="Введите ТПС..."
+            onFocus={() => setExpanded(true)}
+            onChange={handleInputChange}
+            value={inputValue}
+          />
+          {isExpanded && (
+            <button
+              className="input__close"
+              onClick={() => {
+                setExpanded(false);
+                setInputValue("");
+              }}
+            >
+              <CloseSearchSvg />
+            </button>
+          )}
+        </InputContainer>
+        {isExpanded && <Divider />}
+        <div className="scroll-container">
+          {isExpanded && (
+            <ListsContainer>
+              <CountriesList>
+                {filterCountries?.length ? (
+                  filterCountries.map((country) => {
+                    const isSelectedCountry = selectedCountry.length;
+                    const findedSelectedCountry = selectedCountry.find(
+                      (_) => _.name === country.name
+                    );
+                    const findedChangeLength = filterElems.find((_) => _.name === country.name);
+                    return (
+                      <CountryItem
+                        key={country.name}
+                        openSubList={isSelectedCountry && findedSelectedCountry}
+                      >
+                        <div
+                          className="country-item__head"
+                          onClick={() => handleCountryClick(country)}
+                        >
+                          <span>
+                            {country.name} ({findedChangeLength?.elems?.length})
+                          </span>
+                          <ArrowListSvg />
+                        </div>
+
+                        {isSelectedCountry && findedSelectedCountry ? (
+                          <ElemsList>
+                            {findedSelectedCountry.elems
+                              .filter((elem) =>
+                                elem.name.toLowerCase().includes(inputValue.toLowerCase())
+                              )
+                              .map((elem, index) => (
+                                <ElemItem
+                                  key={index}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCityClick(elem);
+                                  }}
+                                >
+                                  {getIconByStatus(elem.status)}
+                                  <div className="elem__desc">
+                                    <p className="desc__name">{elem.name}</p>
+                                    {elem.address ? (
+                                      <p className="desc__address">{elem.address}</p>
+                                    ) : null}
+                                  </div>
+                                </ElemItem>
+                              ))}
+                          </ElemsList>
+                        ) : null}
+                      </CountryItem>
+                    );
+                  })
+                ) : (
+                  <p>Не найдено</p>
+                )}
+              </CountriesList>
+            </ListsContainer>
+          )}
+        </div>
+      </CountrySelectorContainer>
+    </>
+  );
+};
+
+export default ObjectSelector;
+
 const CountrySelectorContainer = styled.div`
   position: relative;
   top: 8px;
@@ -191,172 +371,10 @@ const Divider = styled.div`
   width: calc(100% + 20px);
 `;
 
-const ObjectSelector = ({ countries, handleMarkerClick }) => {
-  const [isExpanded, setExpanded] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState([]);
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-  };
-
-  const handleCountryClick = (country) => {
-    // console.log(country);
-    setSelectedCountry((prevSelectedCountry) => {
-      const isCountryInPrev = prevSelectedCountry.some((_) => _.name === country.name);
-
-      return isCountryInPrev
-        ? prevSelectedCountry.filter((_) => _.name !== country.name)
-        : [...prevSelectedCountry, country];
-    });
-    // setExpanded(true); // Не закрываем список при клике на страну
-  };
-
-  const handleCityClick = (elem) => {
-    // Обработка выбора города
-    handleMarkerClick(elem.coordinates);
-    console.log(`Выбран: ${elem?.name}`);
-  };
-
-  const getIconByStatus = (status) => {
-    switch (`${status}`) {
-      case "1":
-        return <ShopHouseSvg />;
-      case "2":
-        return <SettingsSvg />;
-      case "3":
-        return <PredstavSvg />;
-      case "4a":
-        return <CrownYSvg />;
-      case "4b":
-        return <CrownRSvg />;
-      case "4c":
-        return <CrownBSvg />;
-      // case "5":
-      //   return <BuildingSvg />;
-      case "6":
-        return <NotWorkSvg />;
-      case "7a":
-        return <NewCrownGSvg />;
-      case "7b":
-        return <NewCrownBSvg />;
-      case "7c":
-        return <NewCrownYSvg />;
-      case "7d":
-        return <NewCrownLBSvg />;
-
-      default:
-        return null;
-    }
-  };
-
-  const filterElems =
-    countries.map((el) => {
-      const newEl = { ...el, elems: el.elems.map((_el) => ({ ..._el })) };
-      newEl.elems = newEl.elems.filter((_) =>
-        _.name.toLowerCase().includes(inputValue.toLowerCase())
-      );
-
-      return newEl;
-    }) || [];
-
-  const filterCountries = countries?.filter(
-    (country) =>
-      (country.name.toLowerCase().includes(inputValue.toLowerCase()) &&
-        filterElems.find((_c) => _c.name === country.name)?.elems?.length) ||
-      country.elems.some((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()))
-  );
-
-  // console.log(filterElems, filterCountries);
-
-  return (
-    <CountrySelectorContainer>
-      <InputContainer>
-        <MapMarkerIcon />
-        <Input
-          type="text"
-          placeholder="Введите ТПС..."
-          onFocus={() => setExpanded(true)}
-          onChange={handleInputChange}
-          value={inputValue}
-        />
-        {isExpanded && (
-          <button
-            className="input__close"
-            onClick={() => {
-              setExpanded(false);
-              setInputValue("");
-            }}
-          >
-            <CloseSearchSvg />
-          </button>
-        )}
-      </InputContainer>
-      {isExpanded && <Divider />}
-      <div className="scroll-container">
-        {isExpanded && (
-          <ListsContainer>
-            <CountriesList>
-              {filterCountries?.length ? (
-                filterCountries.map((country) => {
-                  const isSelectedCountry = selectedCountry.length;
-                  const findedSelectedCountry = selectedCountry.find(
-                    (_) => _.name === country.name
-                  );
-                  const findedChangeLength = filterElems.find((_) => _.name === country.name);
-                  return (
-                    <CountryItem
-                      key={country.name}
-                      openSubList={isSelectedCountry && findedSelectedCountry}
-                    >
-                      <div
-                        className="country-item__head"
-                        onClick={() => handleCountryClick(country)}
-                      >
-                        <span>
-                          {country.name} ({findedChangeLength?.elems?.length})
-                        </span>
-                        <ArrowListSvg />
-                      </div>
-
-                      {isSelectedCountry && findedSelectedCountry ? (
-                        <ElemsList>
-                          {findedSelectedCountry.elems
-                            .filter((elem) =>
-                              elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                            )
-                            .map((elem, index) => (
-                              <ElemItem
-                                key={index}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCityClick(elem);
-                                }}
-                              >
-                                {getIconByStatus(elem.status)}
-                                <div className="elem__desc">
-                                  <p className="desc__name">{elem.name}</p>
-                                  {elem.address ? (
-                                    <p className="desc__address">{elem.address}</p>
-                                  ) : null}
-                                </div>
-                              </ElemItem>
-                            ))}
-                        </ElemsList>
-                      ) : null}
-                    </CountryItem>
-                  );
-                })
-              ) : (
-                <p>Не найдено</p>
-              )}
-            </CountriesList>
-          </ListsContainer>
-        )}
-      </div>
-    </CountrySelectorContainer>
-  );
-};
-
-export default ObjectSelector;
+const Overlay = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+`;
